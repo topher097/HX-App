@@ -1,6 +1,5 @@
-clc;
-clear;
-home;
+clc; clear; home;
+close all;
 
 disp("Starting...");
 
@@ -10,7 +9,7 @@ sendVarCount = 4;           % number of variables to be sent by serial
 readVarType = "string";     % datatype of variables read from serial
 sendVarType = "double";     % datatype of variables sent by serial
 BAUD = 9600;                % baud rate of serial connection
-comPort = "COM6";           % COM port used by teensy, may change depending on machine  
+load('comPort.mat');        % loads COM port last used, ex: "COM5"  
 
 % Get user input for COM port to use
 portsAvailable = serialportlist("available");       % Lists the available COM ports
@@ -19,12 +18,12 @@ if ~(isempty(portsAvailable))
     disp("Ports available:");
     disp(portsAvailable);
     while ~(setCOMPort)
-        prompt = strcat("Please input COM port to use (press enter to use default ", comPort, "): ");
+        prompt = strcat("Please input COM port to use (press enter to use last used: ", comPort, "): ");
         inputStr = input(prompt, 's');
         if ~(inputStr == "")
             if (any(strcmp(portsAvailable, inputStr)))
                 comPort = inputStr;
-                disp(strcat("Using", comPort, "port"));
+                disp(strcat("Using ", comPort, " port for serial connection"));
                 setCOMPort = 1;
             else
                 disp("Invalid input, try again...")
@@ -41,6 +40,8 @@ end
 
 
 % Set serial communcation object
+%comPortFile = matfile('comPort.mat', 'Writable', true);
+save comPort.mat comPort -v7.3;         % Save comPort variable for use next time
 teensy = serialport(comPort,BAUD);      % Create teensy object
 configureTerminator(teensy, "CR/LF");   % Terminator set in teensy code
 flush(teensy);                          % Flush serial bits
@@ -73,25 +74,29 @@ H = uicontrol('Style', 'PushButton', ...
 
 while (ishandle(H))
     % Read data from master teensy via serial
-    data = str2double(split(readline(teensy), ","));
-    teensy.UserData.Time(end+1) = data(1);
-    teensy.UserData.inletPressureUpstream(end+1) = data(2);
-    teensy.UserData.inletPressureDownstream(end+1) = data(3);
-    teensy.UserData.outletPressureVapor(end+1) = data(4);
-    teensy.UserData.outletPressureLiquid(end+1) = data(5);
-    teensy.UserData.heaterTemperature1(end+1) = data(6);
-    teensy.UserData.heaterTemperature2(end+1) = data(7);
-    teensy.UserData.heaterTemperature3(end+1) = data(8);
-    teensy.UserData.heaterTemperature4(end+1) = data(9);
-    teensy.UserData.heaterTemperature5(end+1) = data(10);
-    teensy.UserData.boilSurfaceTemperature1(end+1) = data(11);
-    teensy.UserData.boilSurfaceTemperature2(end+1) = data(12);
-    teensy.UserData.boilSurfaceTemperature3(end+1) = data(13);
-    teensy.UserData.boilSurfaceTemperature4(end+1) = data(14);
-    teensy.UserData.averageBoilSurfaceTemp(end+1) = data(15);
-    teensy.UserData.inletFlowRate(end+1) = data(16);
-    teensy.UserData.inletFluidTemperature(end+1) = data(17);
-    
-    % Display data
-    disp(data);
+    if (teensy.NumBytesAvailable > 0)
+        data = str2double(split(readline(teensy), ","));
+        disp(data);
+        i = 1;
+        teensy.UserData.Time(end+1)                     = data(i); i=i+1;
+        teensy.UserData.inletPressureUpstream(end+1)    = data(i); i=i+1;
+        teensy.UserData.inletPressureDownstream(end+1)  = data(i); i=i+1;
+        teensy.UserData.outletPressureVapor(end+1)      = data(i); i=i+1;
+        teensy.UserData.outletPressureLiquid(end+1)     = data(i); i=i+1;
+        teensy.UserData.heaterTemperature1(end+1)       = data(i); i=i+1;
+        teensy.UserData.heaterTemperature2(end+1)       = data(i); i=i+1;
+        teensy.UserData.heaterTemperature3(end+1)       = data(i); i=i+1;
+        teensy.UserData.heaterTemperature4(end+1)       = data(i); i=i+1;
+        teensy.UserData.heaterTemperature5(end+1)       = data(i); i=i+1;
+        teensy.UserData.boilSurfaceTemperature1(end+1)  = data(i); i=i+1;
+        teensy.UserData.boilSurfaceTemperature2(end+1)  = data(i); i=i+1;
+        teensy.UserData.boilSurfaceTemperature3(end+1)  = data(i); i=i+1;
+        teensy.UserData.boilSurfaceTemperature4(end+1)  = data(i); i=i+1;
+        teensy.UserData.averageBoilSurfaceTemp(end+1)   = data(i); i=i+1;
+        teensy.UserData.inletFlowRate(end+1)            = data(i); i=i+1;
+        teensy.UserData.inletFluidTemperature(end+1)    = data(i); i=i+1;
+
+        % Display data
+        disp(data);
+    end
 end
