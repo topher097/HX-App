@@ -4,11 +4,11 @@ close all;
 disp("Starting...");
 
 % Declare vars
-readVarCount = 17;          % number of variables to be read from serial
+readVarCount = 25;          % number of variables to be read from serial
 sendVarCount = 4;           % number of variables to be sent by serial
 readVarType = "string";     % datatype of variables read from serial
 sendVarType = "double";     % datatype of variables sent by serial
-BAUD = 9600;                % baud rate of serial connection
+BAUD = 115200;              % baud rate of serial connection
 load('comPort.mat');        % loads COM port last used, ex: "COM5"  
 
 % Get user input for COM port to use
@@ -61,9 +61,16 @@ teensy.UserData = struct("Time",[], ...
                          "boilSurfaceTemperature4",[], ...
                          "averageBoilSurfaceTemp",[], ...
                          "inletFlowRate",[], ...
-                         "inletFluidTemperature",[]);
-
-                     
+                         "inletFluidTemperature",[], ...
+                         "frequency1",[], ...
+                         "frequency2",[], ...
+                         "amplitude1",[], ...
+                         "amplitude2",[], ...
+                         "phase1",[], ...
+                         "phase2",[], ...
+                         "enable1",[], ...
+                         "enable2",[], ...
+                         "endTesting",[]);
 
 % Test GUI
 DlgH = figure;
@@ -95,6 +102,15 @@ while (ishandle(H))
         teensy.UserData.averageBoilSurfaceTemp(end+1)   = data(i); i=i+1;
         teensy.UserData.inletFlowRate(end+1)            = data(i); i=i+1;
         teensy.UserData.inletFluidTemperature(end+1)    = data(i); i=i+1;
+        teensy.UserData.frequency1(end+1)               = data(i); i=i+1;
+        teensy.UserData.frequency2(end+1)               = data(i); i=i+1;
+        teensy.UserData.amplitude1(end+1)               = data(i); i=i+1;
+        teensy.UserData.amplitude2(end+1)               = data(i); i=i+1;
+        teensy.UserData.phase1(end+1)                   = data(i); i=i+1;
+        teensy.UserData.phase2(end+1)                   = data(i); i=i+1;
+        teensy.UserData.enable1(end+1)                  = data(i); i=i+1;
+        teensy.UserData.enable2(end+1)                  = data(i); i=i+1;
+        teensy.UserData.endTesting(end+1)               = data(i); i=i+1;
 
         % Display data
         disp(data);
