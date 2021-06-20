@@ -4,7 +4,7 @@ close all;
 disp("Starting...");
 
 % Declare vars
-readVarCount = 25;          % number of variables to be read from serial
+readVarCount = 24;          % number of variables to be read from serial
 sendVarCount = 4;           % number of variables to be sent by serial
 readVarType = "string";     % datatype of variables read from serial
 sendVarType = "double";     % datatype of variables sent by serial
@@ -69,8 +69,7 @@ teensy.UserData = struct("Time",[], ...
                          "phase1",[], ...
                          "phase2",[], ...
                          "enable1",[], ...
-                         "enable2",[], ...
-                         "endTesting",[]);
+                         "enable2",[]);
 
 % Test GUI
 DlgH = figure;
@@ -78,7 +77,8 @@ DlgH.Position = [1000 800 100 50]; % [x_pos y_pos height width]
 H = uicontrol('Style', 'PushButton', ...
                     'String', 'Break', ...
                     'Callback', 'delete(gcbf)');
-
+%disp("ready");
+%while (ishandle(H))
 while (ishandle(H))
     % Read data from master teensy via serial
     if (teensy.NumBytesAvailable > 0)
@@ -115,4 +115,5 @@ while (ishandle(H))
         % Display data
         disp(data);
     end
+    %disp(teensy.UserData);
 end
