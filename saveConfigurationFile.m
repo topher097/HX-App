@@ -2,13 +2,14 @@
 BAUD            = 115200;
 comPort         = 'COM6';
 plotSeconds     = 20;
+plotUpdateTime  = 0.5;
 readVarCount    = 25;
 readVarType     = "string";
 sendVarCount    = 12;
 sendVarType     = "double";
        
 % Save configuration.mat file
-save('configuration.mat', 'BAUD', 'comPort', 'plotSeconds', 'readVarCount', ...
+save('configuration.mat', 'BAUD', 'comPort', 'plotSeconds', 'plotUpdateTime', 'readVarCount', ...
      'readVarType', 'sendVarCount', 'sendVarType', '-v7.3');
 clc;
 clear;
