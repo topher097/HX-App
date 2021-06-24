@@ -1,9 +1,9 @@
 % Variables
 BAUD            = 115200;
 comPort         = 'COM6';
-plotSeconds     = 20;
+plotSeconds     = 30;
 plotUpdateTime  = 0.5;
-readVarCount    = 25;
+readVarCount    = 28;
 readVarType     = "string";
 sendVarCount    = 12;
 sendVarType     = "double";
