@@ -4,7 +4,7 @@ load configuration.mat
 BAUD            = 115200;
 comPort         = 'COM6';
 plotSeconds     = 30;
-plotUpdateTime  = 0.5;
+plotUpdateTime  = 1.0;
 readVarCount    = 30;
 readVarType     = "string";
 sendVarCount    = 13;
